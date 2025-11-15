@@ -3,8 +3,6 @@ package com.inmemDBexample.inmemCRUD.controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.http.ResponseEntity;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -47,7 +45,6 @@ public class PostController {
 
     // Helper function to extract all 'body' fields from the JSON string
     private List<String> extractBodiesFromJson(String json) {
-        // Use Jackson ObjectMapper to parse the JSON array and extract 'body' fields
         try {
             com.fasterxml.jackson.databind.ObjectMapper mapper = new com.fasterxml.jackson.databind.ObjectMapper();
             java.util.List<java.util.Map<String, Object>> comments = mapper.readValue(json, java.util.List.class);
@@ -59,3 +56,4 @@ public class PostController {
         }
     }
 }
+
