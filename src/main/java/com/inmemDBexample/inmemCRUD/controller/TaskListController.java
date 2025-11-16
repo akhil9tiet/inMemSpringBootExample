@@ -1,11 +1,10 @@
 package com.inmemDBexample.inmemCRUD.controller;
 
 import com.inmemDBexample.inmemCRUD.domain.dto.TaskListDto;
+import com.inmemDBexample.inmemCRUD.domain.entities.TaskList;
 import com.inmemDBexample.inmemCRUD.mappers.TaskListMapper;
 import com.inmemDBexample.inmemCRUD.services.TaskListService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,5 +27,13 @@ public class TaskListController {
                 .stream()
                 .map(taskListMapper::toDto)
                 .toList();
+    }
+
+    @PostMapping
+    public TaskListDto createTaskList(@RequestBody TaskListDto taskListDto) {
+       TaskList createdTaskList = taskListService.createTaskList(
+                taskListMapper.fromDTO(taskListDto)
+       );
+         return taskListMapper.toDto(createdTaskList);
     }
 }
