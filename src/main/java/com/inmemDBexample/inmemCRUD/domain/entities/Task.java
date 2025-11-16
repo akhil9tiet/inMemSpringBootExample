@@ -1,11 +1,6 @@
 package com.inmemDBexample.inmemCRUD.domain.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
@@ -39,16 +34,21 @@ public class Task {
     @Column(name="updated", nullable = false)
     private LocalDateTime updated;
 
-    public Task() {
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "task_list_id", nullable = true) // foreign key to TaskList
+    private TaskList taskList;
+
+    public Task(UUID id, String title, String description, TaskPriority priority, TaskStatus status, Object o, Object object, Object o1) {
     }
 
-    public Task(UUID id, String title, String description, LocalDateTime dueDate, TaskStatus status, TaskPriority priority, LocalDateTime created, LocalDateTime updated) {
+    public Task(UUID id, String title, String description, LocalDateTime dueDate, TaskStatus status, TaskPriority priority, LocalDateTime created, LocalDateTime updated, TaskList taskList) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.dueDate = dueDate;
         this.status = status;
         this.priority = priority;
+        this.taskList = taskList;
         this.created = created;
         this.updated = updated;
     }
@@ -117,16 +117,24 @@ public class Task {
         this.updated = updated;
     }
 
+    public TaskList getTaskList() {
+        return taskList;
+    }
+
+    public void setTaskList(TaskList taskList) {
+        this.taskList = taskList;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Task task = (Task) o;
-        return Objects.equals(id, task.id) && Objects.equals(title, task.title) && Objects.equals(description, task.description) && Objects.equals(dueDate, task.dueDate) && status == task.status && priority == task.priority && Objects.equals(created, task.created) && Objects.equals(updated, task.updated);
+        return Objects.equals(id, task.id) && Objects.equals(title, task.title) && Objects.equals(description, task.description) && Objects.equals(dueDate, task.dueDate) && status == task.status && priority == task.priority && Objects.equals(created, task.created) && Objects.equals(updated, task.updated) && Objects.equals(taskList, task.taskList);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, description, dueDate, status, priority, created, updated);
+        return Objects.hash(id, title, description, dueDate, status, priority, created, updated, taskList);
     }
 
     @Override
@@ -140,15 +148,7 @@ public class Task {
                 ", priority=" + priority +
                 ", created=" + created +
                 ", updated=" + updated +
+                ", taskList=" + taskList +
                 '}';
-    }
-
-    // Placeholder enums for compilation
-    enum TaskStatus {
-        TODO, IN_PROGRESS, DONE
-    }
-
-    enum TaskPriority {
-        LOW, MEDIUM, HIGH
     }
 }
