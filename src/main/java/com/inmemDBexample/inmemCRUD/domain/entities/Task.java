@@ -38,6 +38,10 @@ public class Task {
     @JoinColumn(name = "task_list_id", nullable = true) // foreign key to TaskList
     private TaskList taskList;
 
+    // No-argument constructor required by Hibernate
+    public Task() {
+    }
+
     public Task(UUID id, String title, String description, TaskPriority priority, TaskStatus status, Object o, Object object, Object o1) {
     }
 
