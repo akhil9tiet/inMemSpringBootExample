@@ -37,16 +37,29 @@ public class TaskListMapperImpl implements TaskListMapper {
 
     @Override
     public TaskListDto toDto(TaskList taskList) {
+        List<Task> tasks = null;
+        try {
+            tasks = taskList.getTasks();
+            // Check if the collection is initialized (not a lazy proxy that hasn't been loaded)
+            if (tasks != null) {
+                tasks.size(); // Force lazy loading if needed
+            }
+        } catch (Exception e) {
+            // If lazy loading fails or collection is not loaded, set to null
+            tasks = null;
+        }
+
+        final List<Task> finalTasks = tasks;
         return new TaskListDto(
                 taskList.getId(),
                 taskList.getTitle(),
                 taskList.getDescription(),
-                Optional.ofNullable(taskList.getTasks())
+                Optional.ofNullable(finalTasks)
                         .map(List::size)
                         .orElse(0),
-                calculateTaskListProgress(taskList.getTasks()),
-                Optional.ofNullable(taskList.getTasks())
-                        .map(tasks -> tasks.stream()
+                calculateTaskListProgress(finalTasks),
+                Optional.ofNullable(finalTasks)
+                        .map(taskList_tasks -> taskList_tasks.stream()
                                 .map(taskMapper::toDTO)
                                 .toList()
                         ).orElse(null)
