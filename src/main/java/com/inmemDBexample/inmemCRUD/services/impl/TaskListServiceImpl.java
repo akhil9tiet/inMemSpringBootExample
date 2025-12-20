@@ -28,7 +28,7 @@ public class TaskListServiceImpl implements TaskListService {
            throw new IllegalArgumentException("TaskList already has an ID");
         }
         if(taskList.getTitle()==null || taskList.getTitle().isBlank()){
-            throw new IllegalArgumentException("TaskList title cmust be present");
+            throw new IllegalArgumentException("TaskList title must be present");
         }
         LocalDateTime now = LocalDateTime.now();
         return taskListRepository.save(new TaskList(
