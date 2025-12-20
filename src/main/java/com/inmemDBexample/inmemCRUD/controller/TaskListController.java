@@ -9,6 +9,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 
 @RestController
@@ -47,5 +49,11 @@ public class TaskListController {
                 taskListMapper.fromDTO(taskListDto)
        );
          return taskListMapper.toDto(createdTaskList);
+    }
+
+    @GetMapping(path="/{task_list_id")
+    public Optional<TaskListDto> getTaskList(@PathVariable("task_list_id") UUID taskListId) {
+        return taskListService.getTaskList(taskListId)
+                .map(taskListMapper::toDto);
     }
 }
