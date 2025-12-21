@@ -66,4 +66,39 @@ public class TaskServiceImpl implements TaskService {
     public Optional<Task> getTask(UUID taskListId, UUID taskId) {
         return taskRepository.findByTaskListIdAndId(taskListId, taskId);
     }
+
+    @Override
+    public Task updateTask(UUID taskListId, UUID taskId, Task task) {
+        if(null == task.getId()){
+            throw new IllegalArgumentException("Task ID must be present");
+        }
+        if(!task.getId().equals(taskId)){
+            throw new IllegalArgumentException("Attempting to change Task ID, this is not permitted");
+        }
+
+        if(null == task.getPriority()){
+            throw new IllegalArgumentException("Task Priority must be present");
+        }
+
+        if(null == task.getStatus()){
+            throw new IllegalArgumentException("Task Status must be present");
+        }
+
+        Task existingTask = taskRepository.findByTaskListIdAndId(taskListId, taskId)
+                .orElseThrow(()-> new IllegalArgumentException("Task with ID "+taskId+" does not exist in Task List with ID "+taskListId));
+
+        existingTask.setTitle(task.getTitle());
+        existingTask.setDescription(task.getDescription());
+        existingTask.setDueDate(task.getDueDate());
+        existingTask.setStatus(task.getStatus());
+        existingTask.setPriority(task.getPriority());
+        existingTask.setUpdated(LocalDateTime.now());
+
+        return taskRepository.save(existingTask);
+    }
+
+    @Override
+    public void deleteTask(UUID taskListId, UUID taskId) {
+        taskRepository.deleteByTaskListIdAndId(taskListId,taskId);
+    }
 }
