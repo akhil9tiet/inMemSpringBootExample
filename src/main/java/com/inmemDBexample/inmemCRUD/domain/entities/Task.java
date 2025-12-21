@@ -1,5 +1,6 @@
 package com.inmemDBexample.inmemCRUD.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -36,6 +37,7 @@ public class Task {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "task_list_id", nullable = true) // foreign key to TaskList
+    @JsonIgnore
     private TaskList taskList;
 
     // No-argument constructor required by Hibernate

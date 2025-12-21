@@ -1,5 +1,6 @@
 package com.inmemDBexample.inmemCRUD.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -21,6 +22,7 @@ public class TaskList {
     private String description;
 
     @OneToMany(mappedBy = "taskList", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
+    @JsonIgnore
     private List<Task> tasks;
 
     @Column(name="created", nullable = false)
