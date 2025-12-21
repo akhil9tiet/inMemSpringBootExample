@@ -22,7 +22,7 @@ public class TaskMapperImpl implements TaskMapper {
     }
 
     @Override
-    public TaskDto toDTO(Task task) {
+    public TaskDto toDto(Task task) {
         return new TaskDto(
             task.getId(),
             task.getTitle(),
