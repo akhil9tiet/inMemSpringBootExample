@@ -1,12 +1,10 @@
 package com.inmemDBexample.inmemCRUD.controller;
 
 import com.inmemDBexample.inmemCRUD.domain.dto.TaskDto;
+import com.inmemDBexample.inmemCRUD.domain.entities.Task;
 import com.inmemDBexample.inmemCRUD.mappers.TaskMapper;
 import com.inmemDBexample.inmemCRUD.services.TaskService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -28,5 +26,15 @@ public class TasksController {
                 .stream()
                 .map(taskMapper::toDto)
                 .toList();
+    }
+
+    @PostMapping
+    public TaskDto createTask(@PathVariable("task_list_id") UUID taskListId,
+                              @RequestBody TaskDto taskDto) {
+        Task createdTask = taskService.createTask(
+                taskListId,
+                taskMapper.fromDTO(taskDto)
+        );
+        return taskMapper.toDto(createdTask);
     }
 }
